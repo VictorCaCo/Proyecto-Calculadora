@@ -10,7 +10,16 @@ package Calculadora;
  * @author eespinosru
  */
 public class ProyectoCalculadora {
-
+    private String cad;
+    private String[] arre;
+    private int numE;
+    private final int MAX=100;
+    
+    public ProyectoCalculadora(String c){
+        cad=c;
+        arre= new String[MAX];
+        numE=0;
+    } 
     /**
      * @param args the command line arguments
      */

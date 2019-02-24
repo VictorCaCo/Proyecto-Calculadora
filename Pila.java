@@ -1,56 +1,83 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+import static javafx.scene.input.KeyCode.T;
+
+/**
+ *
+ * @author eespinosru
  */
-package Calculadora;
+public class ProyectoCalculadora {
 
-public class Pila<T> implements PilaADT<T> {
+    /**
+     * @param args the command line arguments
+     */
+    public static <T> void main(String[] args) {
+        
+        String infijo;
+        String[] opArr;
+        double[] numFinal;
+        char[] opFinal;
+        int cantOp, cantNum, cantOpArr, posIn, n;
+        Pila signos;
+        T[] postFijo;
+        boolean res = true;
+        
+        signos = new Pila();
+        
+        n = -1;
+        posIn = 0;
+        cantOp= 0;
+        infijo = "24^4*8+55";
+        infijo = infijo + " ";
+        postFijo = (T[]) new Object[infijo.length()];
+        
+        while(posIn < infijo.length()){
 
-    private T[] colec;
-    private int tope;
-    private final int MAX = 10;
-
-    public Pila() {
-        colec = (T[]) new Object[MAX];
-        tope = -1;
-    }
-
-    public void push(T dato) {
-
-        if (!isFull()) {
-            tope++;
+        while(posIn < infijo.length()-1 && !(infijo.charAt(posIn)=='+'||infijo.charAt(posIn)=='-'||infijo.charAt(posIn)=='*'|| infijo.charAt(posIn)=='/' || infijo.charAt(posIn)=='^')){
+            posIn++;
         }
-        colec[tope] = dato;
-    }
-
-    @Override
-
-    public T pop() {
-        T res = null;
-        if (!isEmpty()) {
-            res = peek();
-            tope--;
+        postFijo[++n] = (T) infijo.substring(0, posIn);
+        
+        if(signos.darTope() == -1){
+            signos.push(infijo.charAt(posIn));
+  
         }
-        return res;
-    }
-    public T peek() {
-    T res = null;
-        if(!isEmpty())
-        res = colec[tope];
-    return res;
-    }
+        else
+            switch(infijo.charAt(posIn)){
+                     case '+':
+                         while(signos.darTope() != -1){
+                             postFijo[++n] = (T) signos.pop();
+                                     }
+                         signos.push('+');
+                         break;
+                     case '-':
+                         while(signos.darTope() != -1){
+                             postFijo[++n] = (T) signos.pop();
+                                     }
+                         signos.push('-');
+                         break;
+                     case '*':
+                         while(signos.darTope() != -1 &&(!signos.peek().equals('+') && !signos.peek().equals('-')))
+                        	 postFijo[++n] = (T)signos.pop();
+                         signos.push('*');
+                         break;
+                     case '/':
+                         while(signos.darTope() != -1 && (!signos.peek().equals('+') && !signos.peek().equals('-')))
+                             postFijo[++n] = (T)signos.pop();
+                         signos.push('/');
+                         break;
+                     case '^':
+                         while(signos.darTope() != -1 &&(!signos.peek().equals('*') && !signos.peek().equals('/') && (!signos.peek().equals('+') && !signos.peek().equals('-'))))
+                             postFijo[++n] = (T)signos.pop();
+                         signos.push('^');
+                         break;
+                 }
+        infijo= infijo.substring(posIn+1, infijo.length());
+        posIn = 0;
+    }  
 
-    public boolean isFull(){
-    return(tope==MAX-1);
+    while(signos.darTope()!= -1) {
+        postFijo[++n] = (T)signos.pop();
     }
-    
-    public boolean isEmpty() {
-            return tope == -1;
-    }
-    
-    public int darTope(){
-        return tope;
-    }
-
+    for(int i = 0; i<=n ; i++)
+        System.out.print(postFijo[i] + " ");
+  }
 }

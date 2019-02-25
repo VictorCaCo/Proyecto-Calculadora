@@ -1,0 +1,72 @@
+public class Main {
+    public static boolean sintaxisDeParentesis(String cad){
+        int cont1=0, cont2=0,i=0;
+        boolean res=false, ban=true;
+        while(i<(cad.length()-1)&&!ban){
+            if(cad.charAt(i)=='(')
+                cont1++;
+            else
+                if(cad.charAt(i)==')'){
+                    cont2++;
+                    if(cont1<cont2)
+                        ban=false;
+                }
+            i++;
+        }
+        if(cont1==cont2&&ban)
+            res=true;
+        return res;
+    }
+    
+    public static boolean sintaxisGeneral(String cad){ 
+        boolean res= false;
+        int total=cad.length()-1;
+        if(!cad.contains("+*")&&!cad.contains("*+")&&!cad.contains("/+")&&
+        !cad.contains("+/")&&!cad.contains("*^")&&!cad.contains("^*")&&
+        !cad.contains("-/")&&!cad.contains("-^")&&!cad.contains("-*")&&
+        !cad.contains("^/")&&!cad.contains("/^")&&!cad.contains("^+")&&
+        !cad.contains("**")&&!cad.contains("//")&&!cad.contains("++")&&
+        !cad.contains("^^")&&!cad.contains("+^")&&cad.charAt(total)!='+'&&
+        cad.charAt(total)!='-'&&cad.charAt(total)!='*'&&cad.charAt(total)!='/'&&
+        cad.charAt(total)!='^'&&sintaxisDeParentesis(cad))
+            res=true;
+        return res;
+    }
+    
+    public static String adaptaString (String cad){
+        String aux="";
+        int i=0, aux2=0;
+        while(i<cad.length()&&aux2>=0){
+            aux2=cad.indexOf("+-");
+            if(aux2>=0&&aux2+2<cad.length()){
+                aux=aux+cad.substring(i, aux2)+"-";
+                i=aux2+2;
+                cad=aux+cad.substring(i);
+            }
+        }
+        aux=""; i=0; aux2=0;
+        while(i<cad.length()&&aux2>=0){
+            aux2=cad.indexOf("-+");
+            if(aux2>=0&&aux2+2<cad.length()){
+                aux=aux+cad.substring(i, aux2)+"-";
+                i=aux2+2;
+                cad=aux+cad.substring(i);
+            }
+        }
+        return cad;
+    }
+    
+    /* idea de multiplicación con negativos
+    if(el elemento anterior es un operando)
+        se mete el (-) al arreglo junto con los numeros posteriores
+    */        
+    public static void main(String[] args) {
+        String cad= "12+43-34(12*4/3)", dato= "23+33+-23/23-+23", dato2= "23+33-+23/23+-23";
+        System.out.println(dato+ "   "+ dato2);
+        dato= adaptaString(dato);
+        dato2= adaptaString(dato2);
+        //System.out.println(sintaxisDeParentesis(cad));
+        System.out.println(dato+ "   "+ dato2);
+        //System.out.println(sintaxisGeneral(cad));
+    } 
+}
